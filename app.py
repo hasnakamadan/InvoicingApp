@@ -56,13 +56,29 @@ class InvoiceItem(db.Model):
 
 # --- Utils ---
 def to_decimal(v):
+    """Safely convert a value to ``Decimal``.
+
+    ``Decimal`` can produce surprising results when fed floats directly due to
+    binary floating point representation (e.g. ``Decimal(1.1)`` yielding
+    ``Decimal('1.1000000000000000888…')``).  To avoid this and to be resilient
+    to ``None`` or other invalid values, convert the input to ``str`` first and
+    fall back to ``Decimal(0)`` on failure.
+    """
     try:
-        return Decimal(v)
+        return Decimal(str(v))
     except Exception:
         return Decimal(0)
 
 def money(v):
-    return f"${Decimal(v):,.2f}"
+    """Format a number as a currency string.
+
+    The previous implementation placed the negative sign after the dollar sign
+    (``$-1.00``) which is unconventional and confusing.  This version ensures
+    the sign precedes the currency symbol (``-$1.00``).
+    """
+    n = Decimal(str(v)) if v is not None else Decimal(0)
+    sign = "-" if n < 0 else ""
+    return f"{sign}${abs(n):,.2f}"
 
 app.jinja_env.filters["money"] = money
 
