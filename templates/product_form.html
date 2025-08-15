@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Edit' if product else 'New' }} Item · Invoicer{% endblock %}
+{% block content %}
+<form method="post" class="bg-white rounded-2xl shadow-sm border p-6 max-w-2xl">
+  <div class="grid md:grid-cols-2 gap-4">
+    <div class="md:col-span-2">
+      <label class="text-sm text-slate-600">Name</label>
+      <input required name="name" value="{{ product.name if product }}" class="mt-1 w-full px-3 py-2 rounded-lg border">
+    </div>
+    <div class="md:col-span-2">
+      <label class="text-sm text-slate-600">Description</label>
+      <textarea name="description" rows="3" class="mt-1 w-full px-3 py-2 rounded-lg border">{{ product.description if product }}</textarea>
+    </div>
+    <div>
+      <label class="text-sm text-slate-600">Unit Price</label>
+      <input type="number" step="0.01" name="unit_price" value="{{ product.unit_price if product else 0 }}" class="mt-1 w-full px-3 py-2 rounded-lg border">
+    </div>
+    <div class="flex items-center gap-2 mt-6">
+      <input type="checkbox" name="is_service" {% if product and product.is_service %}checked{% endif %}>
+      <span class="text-sm text-slate-700">This is a service</span>
+    </div>
+  </div>
+  <div class="mt-6 flex gap-3">
+    <button class="px-4 py-2 rounded-lg bg-slate-900 text-white">Save</button>
+    <a class="px-4 py-2 rounded-lg border" href="{{ url_for('products') }}">Cancel</a>
+  </div>
+</form>
+{% endblock %}

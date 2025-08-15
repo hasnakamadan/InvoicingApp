@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Invoicer{% endblock %}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style> body { font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial; } </style>
+</head>
+<body class="bg-slate-50">
+  <header class="backdrop-blur bg-white/70 border-b">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      <a href="{{ url_for('index') }}" class="text-xl font-semibold">🧾 Invoicer</a>
+      <nav class="flex gap-4 text-sm">
+        <a class="hover:underline" href="{{ url_for('customers') }}">Customers</a>
+        <a class="hover:underline" href="{{ url_for('products') }}">Items</a>
+        <a class="hover:underline" href="{{ url_for('invoices') }}">Invoices</a>
+        <a class="px-3 py-1.5 rounded-lg bg-slate-900 text-white hover:bg-slate-800" href="{{ url_for('invoices_new') }}">New Invoice</a>
+      </nav>
+    </div>
+  </header>
+  <main class="max-w-6xl mx-auto px-4 py-6">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="space-y-2 mb-4">
+          {% for cat, msg in messages %}
+            <div class="p-3 rounded-lg {% if cat == 'success' %}bg-emerald-50 text-emerald-800 border border-emerald-200{% elif cat=='error' %}bg-rose-50 text-rose-800 border border-rose-200{% else %}bg-slate-100 border border-slate-200{% endif %}">
+              {{ msg }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="text-center text-xs text-slate-500 py-8">Built with Flask + Tailwind</footer>
+
+  <script>
+    function addItemRow() {
+      const tpl = document.getElementById('item-row-template').content.cloneNode(true);
+      document.getElementById('items').appendChild(tpl);
+      updateTotals();
+    }
+    function removeRow(btn) {
+      btn.closest('.item-row').remove();
+      updateTotals();
+    }
+    function updateTotals() {
+      let subtotal = 0;
+      document.querySelectorAll('.item-row').forEach(row => {
+        const qty = parseFloat(row.querySelector('[name="item_quantity"]').value || '0');
+        const price = parseFloat(row.querySelector('[name="item_unit_price"]').value || '0');
+        subtotal += qty * price;
+      });
+      const subtotalEl = document.getElementById('subtotal');
+      const totalEl = document.getElementById('total');
+      if (subtotalEl) subtotalEl.textContent = '$' + subtotal.toFixed(2);
+      if (totalEl) totalEl.textContent = '$' + subtotal.toFixed(2);
+    }
+    document.addEventListener('input', e => {
+      if (e.target.matches('[name="item_quantity"], [name="item_unit_price"]')) updateTotals();
+    })
+  </script>
+</body>
+</html>

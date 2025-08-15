@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Customers · Invoicer{% endblock %}
+{% block content %}
+<div class="flex items-center justify-between mb-4">
+  <form class="flex gap-2" method="get">
+    <input name="q" value="{{ q }}" placeholder="Search name or email" class="px-3 py-2 rounded-lg border w-64">
+    <button class="px-3 py-2 rounded-lg bg-slate-900 text-white">Search</button>
+  </form>
+  <a href="{{ url_for('customers_new') }}" class="px-3 py-2 rounded-lg bg-slate-900 text-white">New Customer</a>
+</div>
+<div class="bg-white rounded-2xl shadow-sm border overflow-hidden">
+  <table class="w-full text-sm">
+    <thead class="bg-slate-50 text-slate-600">
+      <tr>
+        <th class="text-left p-3">Name</th>
+        <th class="text-left p-3">Email</th>
+        <th class="text-left p-3">Phone</th>
+        <th class="text-left p-3">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for c in customers %}
+      <tr class="border-t">
+        <td class="p-3">{{ c.name }}</td>
+        <td class="p-3">{{ c.email }}</td>
+        <td class="p-3">{{ c.phone }}</td>
+        <td class="p-3">
+          <a class="text-slate-700 hover:underline" href="{{ url_for('customers_edit', cid=c.id) }}">Edit</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

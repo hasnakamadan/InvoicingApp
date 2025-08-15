@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Items · Invoicer{% endblock %}
+{% block content %}
+<div class="flex items-center justify-between mb-4">
+  <div class="text-slate-600">Services & Products</div>
+  <a href="{{ url_for('products_new') }}" class="px-3 py-2 rounded-lg bg-slate-900 text-white">New Item</a>
+</div>
+<div class="bg-white rounded-2xl shadow-sm border overflow-hidden">
+  <table class="w-full text-sm">
+    <thead class="bg-slate-50 text-slate-600">
+      <tr>
+        <th class="text-left p-3">Name</th>
+        <th class="text-left p-3">Type</th>
+        <th class="text-right p-3">Unit Price</th>
+        <th class="text-left p-3">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in products %}
+      <tr class="border-t">
+        <td class="p-3">{{ p.name }}</td>
+        <td class="p-3">{{ 'Service' if p.is_service else 'Product' }}</td>
+        <td class="p-3 text-right">{{ p.unit_price|money }}</td>
+        <td class="p-3">
+          <a class="text-slate-700 hover:underline" href="{{ url_for('products_edit', pid=p.id) }}">Edit</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}New Invoice · Invoicer{% endblock %}
+{% block content %}
+<form method="post" class="bg-white rounded-2xl shadow-sm border p-6">
+  <div class="grid md:grid-cols-2 gap-4">
+    <div>
+      <label class="text-sm text-slate-600">Customer</label>
+      <select name="customer_id" required class="mt-1 w-full px-3 py-2 rounded-lg border">
+        <option value="">Select...</option>
+        {% for c in customers %}
+        <option value="{{ c.id }}">{{ c.name }} — {{ c.email }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div>
+      <label class="text-sm text-slate-600">Invoice Date</label>
+      <input type="date" name="date" class="mt-1 w-full px-3 py-2 rounded-lg border">
+    </div>
+    <div>
+      <label class="text-sm text-slate-600">Due Date</label>
+      <input type="date" name="due_date" class="mt-1 w-full px-3 py-2 rounded-lg border">
+    </div>
+    <div class="md:col-span-2">
+      <label class="text-sm text-slate-600">Notes</label>
+      <textarea name="notes" rows="2" class="mt-1 w-full px-3 py-2 rounded-lg border" placeholder="Optional message on the invoice"></textarea>
+    </div>
+  </div>
+
+  <div class="mt-6">
+    <div class="flex items-center justify-between mb-2">
+      <h3 class="font-semibold">Line Items</h3>
+      <button type="button" onclick="addItemRow()" class="px-3 py-2 rounded-lg border">Add Item</button>
+    </div>
+    <div id="items" class="space-y-2">
+      <template id="item-row-template">
+        <div class="item-row grid md:grid-cols-12 gap-2 bg-slate-50 border rounded-xl p-3">
+          <input class="md:col-span-6 px-3 py-2 rounded-lg border" name="item_description" placeholder="Description">
+          <input class="md:col-span-2 px-3 py-2 rounded-lg border" name="item_quantity" type="number" step="0.01" value="1">
+          <input class="md:col-span-2 px-3 py-2 rounded-lg border" name="item_unit_price" type="number" step="0.01" value="0.00">
+          <div class="md:col-span-2 flex items-center justify-end gap-2">
+            <button type="button" class="px-2 py-1 rounded-lg border" onclick="removeRow(this)">Remove</button>
+          </div>
+        </div>
+      </template>
+      <div class="item-row grid md:grid-cols-12 gap-2 bg-slate-50 border rounded-xl p-3">
+        <input class="md:col-span-6 px-3 py-2 rounded-lg border" name="item_description" placeholder="Description">
+        <input class="md:col-span-2 px-3 py-2 rounded-lg border" name="item_quantity" type="number" step="0.01" value="1">
+        <input class="md:col-span-2 px-3 py-2 rounded-lg border" name="item_unit_price" type="number" step="0.01" value="0.00">
+        <div class="md:col-span-2 flex items-center justify-end gap-2">
+          <button type="button" class="px-2 py-1 rounded-lg border" onclick="removeRow(this)">Remove</button>
+        </div>
+      </div>
+    </div>
+    <div class="flex items-center justify-end gap-6 mt-4 pr-1 text-sm">
+      <div class="text-slate-600">Subtotal:</div>
+      <div id="subtotal" class="font-semibold">$0.00</div>
+      <div class="text-slate-600">Total:</div>
+      <div id="total" class="font-semibold">$0.00</div>
+    </div>
+  </div>
+
+  <div class="mt-6 flex gap-3">
+    <button class="px-4 py-2 rounded-lg bg-slate-900 text-white">Create Invoice</button>
+    <a class="px-4 py-2 rounded-lg border" href="{{ url_for('invoices') }}">Cancel</a>
+  </div>
+</form>
+{% endblock %}

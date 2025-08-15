@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Invoice #{{ inv.id }} · Invoicer{% endblock %}
+{% block content %}
+<div class="bg-white rounded-2xl shadow-sm border p-6">
+  <div class="flex items-start justify-between">
+    <div>
+      <h1 class="text-2xl font-bold">Invoice #{{ inv.id }}</h1>
+      <div class="text-slate-600">Date: {{ inv.date.strftime('%Y-%m-%d') if inv.date }}</div>
+      {% if inv.due_date %}<div class="text-slate-600">Due: {{ inv.due_date.strftime('%Y-%m-%d') }}</div>{% endif %}
+      <div class="mt-4 text-slate-700 whitespace-pre-wrap">{{ inv.notes }}</div>
+    </div>
+    <form method="post" action="{{ url_for('invoice_email', iid=inv.id) }}">
+      <button class="px-4 py-2 rounded-lg bg-slate-900 text-white">Email to {{ inv.customer.email }}</button>
+    </form>
+  </div>
+
+  <div class="grid md:grid-cols-2 gap-6 mt-6">
+    <div class="bg-slate-50 border rounded-xl p-4">
+      <div class="font-semibold mb-1">Bill To</div>
+      <div>{{ inv.customer.name }}</div>
+      <div class="text-slate-600">{{ inv.customer.email }}</div>
+      {% if inv.customer.phone %}<div class="text-slate-600">{{ inv.customer.phone }}</div>{% endif %}
+      {% if inv.customer.address %}<div class="text-slate-600">{{ inv.customer.address }}</div>{% endif %}
+      <div class="text-slate-600">{{ inv.customer.city }} {{ inv.customer.state }} {{ inv.customer.postal_code }}</div>
+    </div>
+    <div class="bg-slate-50 border rounded-xl p-4">
+      <div class="font-semibold mb-1">Summary</div>
+      <div class="flex justify-between py-1"><span>Subtotal</span><span>{{ inv.subtotal|money }}</span></div>
+      <div class="flex justify-between py-1"><span>Tax</span><span>{{ inv.tax|money }}</span></div>
+      <div class="flex justify-between py-1 font-semibold text-lg"><span>Total</span><span>{{ inv.total|money }}</span></div>
+    </div>
+  </div>
+
+  <div class="mt-6 overflow-hidden border rounded-xl">
+    <table class="w-full text-sm">
+      <thead class="bg-slate-50 text-slate-600">
+        <tr>
+          <th class="text-left p-3">Description</th>
+          <th class="text-right p-3">Qty</th>
+          <th class="text-right p-3">Unit</th>
+          <th class="text-right p-3">Line Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for it in inv.items %}
+        <tr class="border-t">
+          <td class="p-3">{{ it.description }}</td>
+          <td class="p-3 text-right">{{ it.quantity }}</td>
+          <td class="p-3 text-right">{{ it.unit_price|money }}</td>
+          <td class="p-3 text-right">{{ (it.quantity * it.unit_price)|money }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

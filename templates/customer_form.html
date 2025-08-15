@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Edit' if customer else 'New' }} Customer · Invoicer{% endblock %}
+{% block content %}
+<form method="post" class="bg-white rounded-2xl shadow-sm border p-6 max-w-2xl">
+  <div class="grid md:grid-cols-2 gap-4">
+    <div>
+      <label class="text-sm text-slate-600">Name</label>
+      <input required name="name" value="{{ customer.name if customer }}" class="mt-1 w-full px-3 py-2 rounded-lg border">
+    </div>
+    <div>
+      <label class="text-sm text-slate-600">Email</label>
+      <input required type="email" name="email" value="{{ customer.email if customer }}" class="mt-1 w-full px-3 py-2 rounded-lg border">
+    </div>
+    <div>
+      <label class="text-sm text-slate-600">Phone</label>
+      <input name="phone" value="{{ customer.phone if customer }}" class="mt-1 w-full px-3 py-2 rounded-lg border">
+    </div>
+    <div>
+      <label class="text-sm text-slate-600">Address</label>
+      <input name="address" value="{{ customer.address if customer }}" class="mt-1 w-full px-3 py-2 rounded-lg border">
+    </div>
+    <div>
+      <label class="text-sm text-slate-600">City</label>
+      <input name="city" value="{{ customer.city if customer }}" class="mt-1 w-full px-3 py-2 rounded-lg border">
+    </div>
+    <div>
+      <label class="text-sm text-slate-600">State</label>
+      <input name="state" value="{{ customer.state if customer }}" class="mt-1 w-full px-3 py-2 rounded-lg border">
+    </div>
+    <div>
+      <label class="text-sm text-slate-600">Postal Code</label>
+      <input name="postal_code" value="{{ customer.postal_code if customer }}" class="mt-1 w-full px-3 py-2 rounded-lg border">
+    </div>
+  </div>
+  <div class="mt-6 flex gap-3">
+    <button class="px-4 py-2 rounded-lg bg-slate-900 text-white">Save</button>
+    <a class="px-4 py-2 rounded-lg border" href="{{ url_for('customers') }}">Cancel</a>
+  </div>
+</form>
+{% endblock %}

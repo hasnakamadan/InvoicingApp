@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Invoices · Invoicer{% endblock %}
+{% block content %}
+<div class="flex items-center justify-between mb-4">
+  <div class="text-slate-600">All invoices</div>
+  <a href="{{ url_for('invoices_new') }}" class="px-3 py-2 rounded-lg bg-slate-900 text-white">New Invoice</a>
+</div>
+<div class="bg-white rounded-2xl shadow-sm border overflow-hidden">
+  <table class="w-full text-sm">
+    <thead class="bg-slate-50 text-slate-600">
+      <tr>
+        <th class="text-left p-3">#</th>
+        <th class="text-left p-3">Customer</th>
+        <th class="text-left p-3">Date</th>
+        <th class="text-left p-3">Due</th>
+        <th class="text-left p-3">Status</th>
+        <th class="text-left p-3">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for inv in invoices %}
+      <tr class="border-t">
+        <td class="p-3">#{{ inv.id }}</td>
+        <td class="p-3">{{ inv.customer.name }}</td>
+        <td class="p-3">{{ inv.date.strftime('%Y-%m-%d') if inv.date }}</td>
+        <td class="p-3">{{ inv.due_date.strftime('%Y-%m-%d') if inv.due_date }}</td>
+        <td class="p-3">{{ inv.status }}</td>
+        <td class="p-3">
+          <a class="text-slate-700 hover:underline" href="{{ url_for('invoice_view', iid=inv.id) }}">View</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
