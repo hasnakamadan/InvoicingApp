@@ -18,17 +18,25 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
 
+COUNTRIES = ["United States", "Canada", "United Kingdom", "Australia"]
+
 # --- Models ---
 class Customer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(120), nullable=False)
+    first_name = db.Column(db.String(120), nullable=False)
+    last_name = db.Column(db.String(120), nullable=False)
     email = db.Column(db.String(200), nullable=False)
     phone = db.Column(db.String(50))
     address = db.Column(db.String(200))
     city = db.Column(db.String(100))
     state = db.Column(db.String(50))
     postal_code = db.Column(db.String(20))
+    country = db.Column(db.String(100))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    @property
+    def full_name(self):
+        return f"{self.first_name} {self.last_name}".strip()
 
 class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -107,43 +115,51 @@ def customers():
     qry = Customer.query
     if q:
         like = f"%{q}%"
-        qry = qry.filter((Customer.name.ilike(like)) | (Customer.email.ilike(like)))
-    rows = qry.order_by(Customer.name).all()
+        qry = qry.filter(
+            (Customer.first_name.ilike(like))
+            | (Customer.last_name.ilike(like))
+            | (Customer.email.ilike(like))
+        )
+    rows = qry.order_by(Customer.first_name, Customer.last_name).all()
     return render_template("customers.html", customers=rows, q=q)
 
 @app.route("/customers/new", methods=["GET", "POST"])
 def customers_new():
     if request.method == "POST":
         c = Customer(
-            name=request.form["name"],
+            first_name=request.form["first_name"],
+            last_name=request.form["last_name"],
             email=request.form["email"],
             phone=request.form.get("phone"),
             address=request.form.get("address"),
             city=request.form.get("city"),
             state=request.form.get("state"),
             postal_code=request.form.get("postal_code"),
+            country=request.form.get("country"),
         )
         db.session.add(c)
         db.session.commit()
         flash("Customer created", "success")
         return redirect(url_for("customers"))
-    return render_template("customer_form.html", customer=None)
+    return render_template("customer_form.html", customer=None, countries=COUNTRIES)
 
 @app.route("/customers/<int:cid>/edit", methods=["GET", "POST"])
 def customers_edit(cid):
     c = Customer.query.get_or_404(cid)
     if request.method == "POST":
-        c.name = request.form["name"]
+        c.first_name = request.form["first_name"]
+        c.last_name = request.form["last_name"]
         c.email = request.form["email"]
         c.phone = request.form.get("phone")
         c.address = request.form.get("address")
         c.city = request.form.get("city")
         c.state = request.form.get("state")
         c.postal_code = request.form.get("postal_code")
+        c.country = request.form.get("country")
         db.session.commit()
         flash("Customer updated", "success")
         return redirect(url_for("customers"))
-    return render_template("customer_form.html", customer=c)
+    return render_template("customer_form.html", customer=c, countries=COUNTRIES)
 
 # Products
 @app.route("/products")
@@ -187,7 +203,7 @@ def invoices():
 
 @app.route("/invoices/new", methods=["GET", "POST"])
 def invoices_new():
-    customers = Customer.query.order_by(Customer.name).all()
+    customers = Customer.query.order_by(Customer.first_name, Customer.last_name).all()
     products = Product.query.order_by(Product.name).all()
     if request.method == "POST":
         customer_id = int(request.form["customer_id"])

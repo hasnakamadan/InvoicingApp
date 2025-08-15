@@ -4,8 +4,12 @@
 <form method="post" class="bg-white rounded-2xl shadow-sm border p-6 max-w-2xl">
   <div class="grid md:grid-cols-2 gap-4">
     <div>
-      <label class="text-sm text-slate-600">Name</label>
-      <input required name="name" value="{{ customer.name if customer }}" class="mt-1 w-full px-3 py-2 rounded-lg border">
+      <label class="text-sm text-slate-600">First Name</label>
+      <input required name="first_name" value="{{ customer.first_name if customer }}" class="mt-1 w-full px-3 py-2 rounded-lg border">
+    </div>
+    <div>
+      <label class="text-sm text-slate-600">Last Name</label>
+      <input required name="last_name" value="{{ customer.last_name if customer }}" class="mt-1 w-full px-3 py-2 rounded-lg border">
     </div>
     <div>
       <label class="text-sm text-slate-600">Email</label>
@@ -30,6 +34,14 @@
     <div>
       <label class="text-sm text-slate-600">Postal Code</label>
       <input name="postal_code" value="{{ customer.postal_code if customer }}" class="mt-1 w-full px-3 py-2 rounded-lg border">
+    </div>
+    <div>
+      <label class="text-sm text-slate-600">Country</label>
+      <select name="country" class="mt-1 w-full px-3 py-2 rounded-lg border">
+        {% for c in countries %}
+        <option value="{{ c }}" {% if (customer and customer.country==c) or (not customer and loop.first) %}selected{% endif %}>{{ c }}</option>
+        {% endfor %}
+      </select>
     </div>
   </div>
   <div class="mt-6 flex gap-3">

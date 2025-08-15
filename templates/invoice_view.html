@@ -17,11 +17,12 @@
   <div class="grid md:grid-cols-2 gap-6 mt-6">
     <div class="bg-slate-50 border rounded-xl p-4">
       <div class="font-semibold mb-1">Bill To</div>
-      <div>{{ inv.customer.name }}</div>
+      <div>{{ inv.customer.full_name }}</div>
       <div class="text-slate-600">{{ inv.customer.email }}</div>
       {% if inv.customer.phone %}<div class="text-slate-600">{{ inv.customer.phone }}</div>{% endif %}
       {% if inv.customer.address %}<div class="text-slate-600">{{ inv.customer.address }}</div>{% endif %}
       <div class="text-slate-600">{{ inv.customer.city }} {{ inv.customer.state }} {{ inv.customer.postal_code }}</div>
+      {% if inv.customer.country %}<div class="text-slate-600">{{ inv.customer.country }}</div>{% endif %}
     </div>
     <div class="bg-slate-50 border rounded-xl p-4">
       <div class="font-semibold mb-1">Summary</div>
