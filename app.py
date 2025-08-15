@@ -44,7 +44,7 @@ class Invoice(db.Model):
     date = db.Column(db.Date, default=datetime.utcnow)
     due_date = db.Column(db.Date)
     notes = db.Column(db.Text)
-    status = db.Column(db.String(20), default="draft")  # draft/sent/paid
+    status = db.Column(db.String(20), default="draft")  # draft/sent
 
 class InvoiceItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
