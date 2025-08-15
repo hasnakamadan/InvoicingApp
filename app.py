@@ -41,7 +41,7 @@ class Invoice(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     customer_id = db.Column(db.Integer, db.ForeignKey("customer.id"), nullable=False)
     customer = db.relationship("Customer", backref=db.backref("invoices", lazy=True))
-    date = db.Column(db.Date, default=datetime.utcnow)
+    date = db.Column(db.Date, default=lambda: datetime.utcnow().date())
     due_date = db.Column(db.Date)
     notes = db.Column(db.Text)
     status = db.Column(db.String(20), default="draft")  # draft/sent/paid
