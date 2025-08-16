@@ -16,6 +16,7 @@
       <h2>Invoice #{{ inv.id }}</h2>
       <div class="muted">Date: {{ inv.date.strftime('%Y-%m-%d') if inv.date }}</div>
       <h3>Bill To</h3>
+      {% if inv.customer.company_name %}<div>{{ inv.customer.company_name }}</div>{% endif %}
       <div>{{ inv.customer.full_name }} — {{ inv.customer.email }}</div>
       <h3>Items</h3>
       <table>
