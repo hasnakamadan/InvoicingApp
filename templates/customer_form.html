@@ -2,51 +2,88 @@
 {% block title %}{{ 'Edit' if customer else 'New' }} Customer · Invoicer{% endblock %}
 {% block content %}
 <form method="post" class="bg-white rounded-2xl shadow-sm border p-6 max-w-2xl">
-  <div class="grid md:grid-cols-2 gap-4">
-    <div>
-      <label class="text-sm text-slate-600">First Name</label>
-      <input required name="first_name" value="{{ customer.first_name if customer }}" class="mt-1 w-full px-3 py-2 rounded-lg border">
+  <div class="space-y-6">
+    <section>
+      <h2 class="text-lg font-medium mb-4">Customer</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="md:col-span-2">
+          <label class="text-sm text-slate-600">Company Name <span class="text-red-500">*</span></label>
+          <input required name="company_name" value="{{ customer.company_name if customer }}" class="mt-1 w-full px-3 py-2 rounded-lg border">
+        </div>
+        <div>
+          <label class="text-sm text-slate-600">First Name <span class="text-red-500">*</span></label>
+          <input required name="first_name" value="{{ customer.first_name if customer }}" class="mt-1 w-full px-3 py-2 rounded-lg border">
+        </div>
+        <div>
+          <label class="text-sm text-slate-600">Last Name <span class="text-red-500">*</span></label>
+          <input required name="last_name" value="{{ customer.last_name if customer }}" class="mt-1 w-full px-3 py-2 rounded-lg border">
+        </div>
+        <div>
+          <label class="text-sm text-slate-600">Email <span class="text-red-500">*</span></label>
+          <div class="mt-1 relative">
+            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+              <svg class="h-5 w-5 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21.75 6.75V17.25C21.75 18.4926 20.7426 19.5 19.5 19.5H4.5C3.25736 19.5 2.25 18.4926 2.25 17.25V6.75M21.75 6.75C21.75 5.50736 20.7426 4.5 19.5 4.5H4.5C3.25736 4.5 2.25 5.50736 2.25 6.75M21.75 6.75V6.99271C21.75 7.77405 21.3447 8.49945 20.6792 8.90894L13.1792 13.5243C12.4561 13.9694 11.5439 13.9694 10.8208 13.5243L3.32078 8.90894C2.65535 8.49945 2.25 7.77405 2.25 6.99271V6.75" />
+              </svg>
+            </div>
+            <input required type="email" name="email" value="{{ customer.email if customer }}" class="w-full rounded-lg border py-2 pl-10 pr-3">
+          </div>
+        </div>
+        <div>
+          <label class="text-sm text-slate-600">Phone</label>
+          <div class="mt-1 relative">
+            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+              <svg class="h-5 w-5 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.25 6.75C2.25 15.0343 8.96573 21.75 17.25 21.75H19.5C20.7426 21.75 21.75 20.7426 21.75 19.5V18.1284C21.75 17.6121 21.3987 17.1622 20.8979 17.037L16.4747 15.9312C16.0355 15.8214 15.5734 15.9855 15.3018 16.3476L14.3316 17.6412C14.05 18.0166 13.563 18.1827 13.1223 18.0212C9.81539 16.8098 7.19015 14.1846 5.97876 10.8777C5.81734 10.437 5.98336 9.94998 6.3588 9.6684L7.65242 8.69818C8.01453 8.4266 8.17861 7.96445 8.06883 7.52533L6.96304 3.10215C6.83783 2.60133 6.38785 2.25 5.87163 2.25H4.5C3.25736 2.25 2.25 3.25736 2.25 4.5V6.75Z" />
+              </svg>
+            </div>
+            <input name="phone" value="{{ customer.phone if customer }}" class="w-full rounded-lg border py-2 pl-10 pr-3">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="text-lg font-medium mb-4">Address</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="md:col-span-2">
+          <label class="text-sm text-slate-600">Address</label>
+          <div class="mt-1 relative">
+            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+              <svg class="h-5 w-5 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.25 12L11.2045 3.04549C11.6438 2.60615 12.3562 2.60615 12.7955 3.04549L21.75 12M4.5 9.75V19.875C4.5 20.4963 5.00368 21 5.625 21H9.75V16.125C9.75 15.5037 10.2537 15 10.875 15H13.125C13.7463 15 14.25 15.5037 14.25 16.125V21H18.375C18.9963 21 19.5 20.4963 19.5 19.875V9.75M8.25 21H16.5" />
+              </svg>
+            </div>
+            <input name="address" value="{{ customer.address if customer }}" class="w-full rounded-lg border py-2 pl-10 pr-3">
+          </div>
+        </div>
+        <div>
+          <label class="text-sm text-slate-600">City</label>
+          <input name="city" value="{{ customer.city if customer }}" class="mt-1 w-full px-3 py-2 rounded-lg border">
+        </div>
+        <div>
+          <label class="text-sm text-slate-600">State</label>
+          <input name="state" value="{{ customer.state if customer }}" class="mt-1 w-full px-3 py-2 rounded-lg border">
+        </div>
+        <div>
+          <label class="text-sm text-slate-600">Postal Code</label>
+          <input name="postal_code" value="{{ customer.postal_code if customer }}" class="mt-1 w-full px-3 py-2 rounded-lg border">
+        </div>
+        <div>
+          <label class="text-sm text-slate-600">Country</label>
+          <select name="country" class="mt-1 w-full px-3 py-2 rounded-lg border">
+            {% for c in countries %}
+            <option value="{{ c }}" {% if (customer and customer.country==c) or (not customer and loop.first) %}selected{% endif %}>{{ c }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <div class="flex gap-3">
+      <button class="px-4 py-2 rounded-lg bg-slate-900 text-white shadow hover:bg-slate-800">Save</button>
+      <a class="px-4 py-2 rounded-lg border shadow hover:bg-slate-50" href="{{ url_for('customers') }}">Cancel</a>
     </div>
-    <div>
-      <label class="text-sm text-slate-600">Last Name</label>
-      <input required name="last_name" value="{{ customer.last_name if customer }}" class="mt-1 w-full px-3 py-2 rounded-lg border">
-    </div>
-    <div>
-      <label class="text-sm text-slate-600">Email</label>
-      <input required type="email" name="email" value="{{ customer.email if customer }}" class="mt-1 w-full px-3 py-2 rounded-lg border">
-    </div>
-    <div>
-      <label class="text-sm text-slate-600">Phone</label>
-      <input name="phone" value="{{ customer.phone if customer }}" class="mt-1 w-full px-3 py-2 rounded-lg border">
-    </div>
-    <div>
-      <label class="text-sm text-slate-600">Address</label>
-      <input name="address" value="{{ customer.address if customer }}" class="mt-1 w-full px-3 py-2 rounded-lg border">
-    </div>
-    <div>
-      <label class="text-sm text-slate-600">City</label>
-      <input name="city" value="{{ customer.city if customer }}" class="mt-1 w-full px-3 py-2 rounded-lg border">
-    </div>
-    <div>
-      <label class="text-sm text-slate-600">State</label>
-      <input name="state" value="{{ customer.state if customer }}" class="mt-1 w-full px-3 py-2 rounded-lg border">
-    </div>
-    <div>
-      <label class="text-sm text-slate-600">Postal Code</label>
-      <input name="postal_code" value="{{ customer.postal_code if customer }}" class="mt-1 w-full px-3 py-2 rounded-lg border">
-    </div>
-    <div>
-      <label class="text-sm text-slate-600">Country</label>
-      <select name="country" class="mt-1 w-full px-3 py-2 rounded-lg border">
-        {% for c in countries %}
-        <option value="{{ c }}" {% if (customer and customer.country==c) or (not customer and loop.first) %}selected{% endif %}>{{ c }}</option>
-        {% endfor %}
-      </select>
-    </div>
-  </div>
-  <div class="mt-6 flex gap-3">
-    <button class="px-4 py-2 rounded-lg bg-slate-900 text-white">Save</button>
-    <a class="px-4 py-2 rounded-lg border" href="{{ url_for('customers') }}">Cancel</a>
   </div>
 </form>
 {% endblock %}
