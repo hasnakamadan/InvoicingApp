@@ -3,6 +3,11 @@
 {% block content %}
 <form method="post" class="bg-white rounded-2xl shadow-sm border p-6 max-w-2xl">
   <div class="grid md:grid-cols-2 gap-4">
+    <div class="md:col-span-2">
+      <label class="text-sm text-slate-600">Company Name</label>
+      <input id="company_name" name="company_name" value="{{ request.form.get('company_name', '') }}" class="mt-1 w-full px-3 py-2 rounded-lg border">
+      <p data-error-for="company_name" class="text-sm text-rose-600 hidden"></p>
+    </div>
     <div>
       <label class="text-sm text-slate-600">First Name</label>
       <input required name="first_name" value="{{ customer.first_name if customer }}" class="mt-1 w-full px-3 py-2 rounded-lg border">
@@ -13,7 +18,8 @@
     </div>
     <div>
       <label class="text-sm text-slate-600">Email</label>
-      <input required type="email" name="email" value="{{ customer.email if customer }}" class="mt-1 w-full px-3 py-2 rounded-lg border">
+      <input id="email" required type="email" name="email" value="{{ customer.email if customer }}" class="mt-1 w-full px-3 py-2 rounded-lg border">
+      <p data-error-for="email" class="text-sm text-rose-600 hidden"></p>
     </div>
     <div>
       <label class="text-sm text-slate-600">Phone</label>
@@ -33,15 +39,17 @@
     </div>
     <div>
       <label class="text-sm text-slate-600">Postal Code</label>
-      <input name="postal_code" value="{{ customer.postal_code if customer }}" class="mt-1 w-full px-3 py-2 rounded-lg border">
+      <input id="postal_code" name="postal_code" value="{{ customer.postal_code if customer }}" class="mt-1 w-full px-3 py-2 rounded-lg border">
+      <p id="postal_hint" class="text-xs text-slate-500 mt-1"></p>
     </div>
     <div>
       <label class="text-sm text-slate-600">Country</label>
-      <select name="country" class="mt-1 w-full px-3 py-2 rounded-lg border">
+      <input id="country" name="country" list="country_list" value="{{ customer.country if customer else countries[0] }}" class="mt-1 w-full px-3 py-2 rounded-lg border">
+      <datalist id="country_list">
         {% for c in countries %}
-        <option value="{{ c }}" {% if (customer and customer.country==c) or (not customer and loop.first) %}selected{% endif %}>{{ c }}</option>
+        <option value="{{ c }}"></option>
         {% endfor %}
-      </select>
+      </datalist>
     </div>
   </div>
   <div class="mt-6 flex gap-3">
@@ -49,4 +57,5 @@
     <a class="px-4 py-2 rounded-lg border" href="{{ url_for('customers') }}">Cancel</a>
   </div>
 </form>
+<script src="{{ url_for('static', filename='js/customer_form.js') }}"></script>
 {% endblock %}
