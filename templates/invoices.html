@@ -21,7 +21,7 @@
       {% for inv in invoices %}
       <tr class="border-t">
         <td class="p-3">#{{ inv.id }}</td>
-        <td class="p-3">{{ inv.customer.name }}</td>
+        <td class="p-3">{{ inv.customer.full_name }}</td>
         <td class="p-3">{{ inv.date.strftime('%Y-%m-%d') if inv.date }}</td>
         <td class="p-3">{{ inv.due_date.strftime('%Y-%m-%d') if inv.due_date }}</td>
         <td class="p-3">{{ inv.status }}</td>
